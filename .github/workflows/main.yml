@@ -1,0 +1,18 @@
+name: Update gist and trigger IFTTT with WakaTime stats
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  # Manual triggers with workflow_dispatch
+  workflow_dispatch:
+jobs:
+  update-gist:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Update gist
+        uses: airingursb/waka-box@master
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GIST_ID: ca03eaa58db87fc814e0fe6ba3c48215
+          WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
+          IFTTT_KEY: ${{ secrets.IFTTT_KEY }}
