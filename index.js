@@ -1,11 +1,13 @@
 require("dotenv").config();
 const { WakaTimeClient, RANGE } = require("wakatime-client");
 const { Octokit } = require("@octokit/rest");
+const axios = require("axios");
 
 const {
   GIST_ID: gistId,
   GH_TOKEN: githubToken,
-  WAKATIME_API_KEY: wakatimeApiKey
+  WAKATIME_API_KEY: wakatimeApiKey,
+  IFTTT_KEY: iftttKey,
 } = process.env;
 
 const wakatime = new WakaTimeClient(wakatimeApiKey);
@@ -38,7 +40,7 @@ async function updateGist(stats) {
     const line = [
       trimRightStr(name, 10).padEnd(10),
       time.padEnd(14),
-      generateBarChart(percent, 21),
+      generateBarChart(percent, 15),
       String(percent.toFixed(1)).padStart(5) + "%"
     ];
 
@@ -61,6 +63,15 @@ async function updateGist(stats) {
     });
   } catch (error) {
     console.error(`Unable to update gist\n${error}`);
+  }
+
+  const currentDate = new Date(); 
+  const currentDay = currentDate.getDay(); 
+
+  if (currentDay === 6) {
+    axios.post(`https://maker.ifttt.com/trigger/receive_wakabox/json/with/key/${iftttKey}`, {
+      value1: lines.join("\n")
+    });
   }
 }
 
