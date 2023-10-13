@@ -65,14 +65,9 @@ async function updateGist(stats) {
     console.error(`Unable to update gist\n${error}`);
   }
 
-  const currentDate = new Date(); 
-  const currentDay = currentDate.getDay(); 
-
-  if (currentDay === 6) {
-    axios.post(`https://maker.ifttt.com/trigger/receive_wakabox/json/with/key/${iftttKey}`, {
-      value1: lines.join("\n")
-    });
-  }
+  axios.post(`https://maker.ifttt.com/trigger/receive_wakabox/json/with/key/${iftttKey}`, {
+    value1: lines.join("\n")
+  });
 }
 
 function generateBarChart(percent, size) {
