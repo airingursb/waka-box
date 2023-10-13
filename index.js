@@ -65,9 +65,13 @@ async function updateGist(stats) {
     console.error(`Unable to update gist\n${error}`);
   }
 
-  axios.post(`https://maker.ifttt.com/trigger/receive_wakabox/json/with/key/${iftttKey}`, {
-    value1: lines.join("\n")
-  });
+  try {
+    await axios.post(`https://maker.ifttt.com/trigger/receive_wakabox/json/with/key/${iftttKey}`, {
+      value1: lines.join("\n")
+    });
+  } catch (error) {
+    console.error(`Unable to send to IFTTT\n${error}`);
+  }
 }
 
 function generateBarChart(percent, size) {
